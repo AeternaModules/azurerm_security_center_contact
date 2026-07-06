@@ -17,5 +17,29 @@ EOT
     name                = string
     phone               = optional(string)
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.security_center_contacts : (
+        length(v.name) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.security_center_contacts : (
+        length(v.email) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.security_center_contacts : (
+        v.phone == null || (length(v.phone) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
 }
 
