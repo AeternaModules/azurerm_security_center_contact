@@ -1,3 +1,7 @@
+output "security_center_contacts_id" {
+  description = "Map of id values across all security_center_contacts, keyed the same as var.security_center_contacts"
+  value       = { for k, v in azurerm_security_center_contact.security_center_contacts : k => v.id }
+}
 output "security_center_contacts_alert_notifications" {
   description = "Map of alert_notifications values across all security_center_contacts, keyed the same as var.security_center_contacts"
   value       = { for k, v in azurerm_security_center_contact.security_center_contacts : k => v.alert_notifications }
