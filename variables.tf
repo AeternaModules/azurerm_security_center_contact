@@ -17,18 +17,29 @@ EOT
     name                = string
     phone               = optional(string)
   }))
-  # --- Unconfirmed validation candidates, derived from azurerm_security_center_contact's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: email
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: phone
-  #   condition: length(value) > 0
-  #   message:   must not be empty
+  validation {
+    condition = alltrue([
+      for k, v in var.security_center_contacts : (
+        length(v.name) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.security_center_contacts : (
+        length(v.email) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.security_center_contacts : (
+        v.phone == null || (length(v.phone) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
 }
 
